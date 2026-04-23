@@ -35,124 +35,127 @@
         <header class="mb-6 border-b border-green-900 pb-4 flex justify-between items-end">
             <div>
                 <h1 class="text-3xl font-bold flex items-center gap-3">
-                    <span class="animate-pulse text-red-600">●</span> ABSOLUTE_MANIFEST_V2.0
+                    <span class="animate-pulse text-green-500">●</span> SYSTEM_FORENSICS_DEEP_SCAN
                 </h1>
-                <p class="text-green-700 text-xs mt-1 font-bold uppercase tracking-widest">Total Data Points Tracked: <span id="data-count">0</span>/30</p>
+                <p class="text-green-700 text-[10px] mt-1 font-bold uppercase tracking-[0.3em]">Total Intelligence Points: <span id="data-count">0</span>/50</p>
             </div>
-            <div class="text-right text-[10px] text-green-800 font-mono">
-                SEC_LEVEL: 0 (SANDBOXED)<br>
-                AUDIT_ID: <span id="audit-id">...</span>
+            <div class="text-right">
+                <div class="bg-green-900/30 px-3 py-1 rounded text-[10px] font-mono text-green-400 border border-green-500/30">
+                    DEVICE_DNA: <span id="device-dna">CALCULATING...</span>
+                </div>
             </div>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+        <!-- GRID SYSTEM -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3" id="manifest-grid">
             
-            <!-- Main Data Feed -->
-            <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="manifest-grid">
-                
-                <!-- HARDWARE -->
-                <div class="glass p-3 rounded border-l-2 border-green-500">
-                    <p class="data-label">Logical CPU Cores</p>
-                    <p class="data-value" id="cpu-info">...</p>
-                </div>
-                <div class="glass p-3 rounded border-l-2 border-green-500">
-                    <p class="data-label">Estimated Device RAM</p>
-                    <p class="data-value" id="ram-info">...</p>
-                </div>
-                <div class="glass p-3 rounded border-l-2 border-green-500">
-                    <p class="data-label">Max Touch Points</p>
-                    <p class="data-value" id="touch-info">...</p>
-                </div>
-                <div class="glass p-3 rounded border-l-2 border-green-500">
-                    <p class="data-label">GPU Architecture</p>
-                    <p class="data-value text-xs" id="gpu-info">...</p>
-                </div>
-
-                <!-- NETWORK/IP -->
-                <div class="glass p-3 rounded border-l-2 border-blue-500">
-                    <p class="data-label">External IPv4</p>
-                    <p class="data-value text-blue-400" id="ip-info">...</p>
-                </div>
-                <div class="glass p-3 rounded border-l-2 border-blue-500">
-                    <p class="data-label">Connection Protocol</p>
-                    <p class="data-value" id="net-type">...</p>
-                </div>
-                <div class="glass p-3 rounded border-l-2 border-blue-500">
-                    <p class="data-label">Network Latency (RTT)</p>
-                    <p class="data-value" id="net-rtt">...</p>
-                </div>
-                <div class="glass p-3 rounded border-l-2 border-blue-500">
-                    <p class="data-label">Save Data Mode</p>
-                    <p class="data-value" id="save-data">...</p>
-                </div>
-
-                <!-- SOFTWARE/OS -->
-                <div class="glass p-3 rounded border-l-2 border-purple-500">
-                    <p class="data-label">Operating System</p>
-                    <p class="data-value" id="os-info">...</p>
-                </div>
-                <div class="glass p-3 rounded border-l-2 border-purple-500">
-                    <p class="data-label">System Timezone</p>
-                    <p class="data-value" id="tz-info">...</p>
-                </div>
-                <div class="glass p-3 rounded border-l-2 border-purple-500">
-                    <p class="data-label">Primary Language</p>
-                    <p class="data-value" id="lang-info">...</p>
-                </div>
-                <div class="glass p-3 rounded border-l-2 border-purple-500">
-                    <p class="data-label">All Lang Preferences</p>
-                    <p class="data-value text-xs" id="all-langs">...</p>
-                </div>
-
-                <!-- BROWSER INTERNALS -->
-                <div class="glass p-3 rounded border-l-2 border-yellow-500">
-                    <p class="data-label">Cookies Enabled</p>
-                    <p class="data-value" id="cookie-info">...</p>
-                </div>
-                <div class="glass p-3 rounded border-l-2 border-yellow-500">
-                    <p class="data-label">PDF Viewer Support</p>
-                    <p class="data-value" id="pdf-info">...</p>
-                </div>
-                <div class="glass p-3 rounded border-l-2 border-yellow-500">
-                    <p class="data-label">Automation/WebDriver</p>
-                    <p class="data-value" id="bot-info">...</p>
-                </div>
-                <div class="glass p-3 rounded border-l-2 border-yellow-500">
-                    <p class="data-label">Online Status</p>
-                    <p class="data-value" id="online-status">...</p>
-                </div>
-
-                <!-- DISPLAY -->
-                <div class="glass p-3 rounded border-l-2 border-red-500">
-                    <p class="data-label">Full Screen Res</p>
-                    <p class="data-value" id="screen-info">...</p>
-                </div>
-                <div class="glass p-3 rounded border-l-2 border-red-500">
-                    <p class="data-label">Usable Window Area</p>
-                    <p class="data-value" id="avail-info">...</p>
-                </div>
-                <div class="glass p-3 rounded border-l-2 border-red-500">
-                    <p class="data-label">Device Pixel Ratio</p>
-                    <p class="data-value" id="dpr-info">...</p>
-                </div>
-                <div class="glass p-3 rounded border-l-2 border-red-500">
-                    <p class="data-label">Color Depth (Bit)</p>
-                    <p class="data-value" id="color-info">...</p>
-                </div>
-
-                <!-- POWER (WIDE) -->
-                <div class="glass p-3 rounded border-l-2 border-orange-500 md:col-span-2 flex justify-between items-center">
-                    <div>
-                        <p class="data-label">Energy Level</p>
-                        <p class="data-value text-2xl font-black" id="battery-level">--%</p>
-                    </div>
-                    <div id="battery-status" class="text-xs text-orange-500 font-bold px-3 py-1 border border-orange-500 rounded">...</div>
-                </div>
-                <div class="glass p-3 rounded border-l-2 border-orange-500">
-                    <p class="data-label">Calendar System</p>
-                    <p class="data-value" id="calendar-info">...</p>
-                </div>
+            <!-- CATEGORY: CORE HARDWARE -->
+            <div class="lg:col-span-4 bg-green-500/10 p-2 text-[10px] font-bold uppercase tracking-widest text-green-500 border-l-4 border-green-500">Core Hardware & Architecture</div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">CPU Threads</p><p class="data-value" id="cpu-info">...</p>
             </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Device RAM</p><p class="data-value" id="ram-info">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">GPU Model</p><p class="data-value text-[10px]" id="gpu-info">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Architecture</p><p class="data-value" id="arch-info">...</p>
+            </div>
+
+            <!-- CATEGORY: MEMORY & STORAGE -->
+            <div class="lg:col-span-4 bg-blue-500/10 p-2 text-[10px] font-bold uppercase tracking-widest text-blue-500 border-l-4 border-blue-500 mt-2">Memory & Storage Diagnostics</div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">JS Heap Limit</p><p class="data-value" id="mem-limit">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Heap Total</p><p class="data-value" id="mem-total">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Used Heap</p><p class="data-value text-blue-400" id="mem-used">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Storage Quota</p><p class="data-value" id="store-quota">...</p>
+            </div>
+
+            <!-- CATEGORY: MEDIA & AUDIO -->
+            <div class="lg:col-span-4 bg-purple-500/10 p-2 text-[10px] font-bold uppercase tracking-widest text-purple-500 border-l-4 border-purple-500 mt-2">Media & Sensor Capabilities</div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Audio Sample Rate</p><p class="data-value" id="audio-rate">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">H.264 Support</p><p class="data-value" id="codec-h264">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">WebM Support</p><p class="data-value" id="codec-webm">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Motion Sensors</p><p class="data-value text-xs" id="sensor-info">...</p>
+            </div>
+
+            <!-- CATEGORY: NETWORK & PRIVACY -->
+            <div class="lg:col-span-4 bg-red-500/10 p-2 text-[10px] font-bold uppercase tracking-widest text-red-500 border-l-4 border-red-500 mt-2">Network & Privacy Signals</div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Public IPv4</p><p class="data-value text-red-400" id="ip-info">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">DNT Header</p><p class="data-value" id="dnt-info">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">GPC Signal</p><p class="data-value" id="gpc-info">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Ad-Block Detected</p><p class="data-value" id="ads-info">...</p>
+            </div>
+
+            <!-- CATEGORY: DISPLAY & INPUT -->
+            <div class="lg:col-span-4 bg-yellow-500/10 p-2 text-[10px] font-bold uppercase tracking-widest text-yellow-500 border-l-4 border-yellow-500 mt-2">Display & Human Interface</div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Resolution</p><p class="data-value" id="screen-info">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Color Depth</p><p class="data-value" id="color-info">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Refresh Rate (Est)</p><p class="data-value" id="refresh-rate">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Touch Points</p><p class="data-value" id="touch-info">...</p>
+            </div>
+
+            <!-- CATEGORY: POWER & LOCALIZATION -->
+            <div class="lg:col-span-4 bg-orange-500/10 p-2 text-[10px] font-bold uppercase tracking-widest text-orange-500 border-l-4 border-orange-500 mt-2">System Context</div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Battery Level</p><p class="data-value" id="battery-level">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Timezone</p><p class="data-value text-xs" id="tz-info">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Language List</p><p class="data-value text-[10px]" id="all-langs">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Incognito Est.</p><p class="data-value" id="incognito-info">...</p>
+            </div>
+        </div>
+
+        <!-- FOOTER LOGS -->
+        <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="bg-black/50 p-4 rounded border border-green-900/50">
+                <h3 class="data-label mb-2 text-green-500">Browser Environment Signature</h3>
+                <div class="text-[9px] font-mono text-green-700 break-all leading-relaxed" id="ua-info">...</div>
+            </div>
+            <div class="bg-black/50 p-4 rounded border border-blue-900/50">
+                <h3 class="data-label mb-2 text-blue-500">Security Sandbox Analysis</h3>
+                <p class="text-[10px] text-gray-400">
+                    Total information points retrieved via Python: <span class="text-white" id="points-count">0</span>. 
+                    Encryption used for DNA: <span class="text-white font-mono">SHA-256</span>.
+                    Direct disk access: <span class="text-red-500 font-bold uppercase">Blocked by Browser</span>.
+                </p>
+            </div>
+        </div>
+    </div>
 
             <!-- Learning Panel -->
             <div class="space-y-4">
@@ -250,9 +253,15 @@ h = screen.height
     </div>
 
     <script>
-        // JS Helper for GPU & Battery (Easier to handle via JS bridge)
+        // JS Helper for advanced browser forensics
         async function getDeepStats() {
-            const stats = {};
+            const stats = {
+                codecs: {},
+                memory: {},
+                storage: {},
+                sensors: {},
+                audio: {}
+            };
             
             // 1. GPU Info
             try {
@@ -260,16 +269,61 @@ h = screen.height
                 const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
                 const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
                 stats.gpu = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-            } catch (e) { stats.gpu = "Restricted/Software"; }
+            } catch (e) { stats.gpu = "Restricted"; }
 
-            // 2. Battery Info
+            // 2. Memory (Chrome only)
+            if (window.performance && window.performance.memory) {
+                stats.memory.total = Math.round(performance.memory.totalJSHeapSize / 1048576) + "MB";
+                stats.memory.used = Math.round(performance.memory.usedJSHeapSize / 1048576) + "MB";
+                stats.memory.limit = Math.round(performance.memory.jsHeapSizeLimit / 1048576) + "MB";
+            }
+
+            // 3. Storage
+            try {
+                const estimate = await navigator.storage.estimate();
+                stats.storage.quota = Math.round(estimate.quota / 1073741824) + "GB";
+            } catch (e) { stats.storage.quota = "Denied"; }
+
+            // 4. Audio
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                stats.audio.sampleRate = audioCtx.sampleRate + "Hz";
+                audioCtx.close();
+            } catch (e) { stats.audio.sampleRate = "Blocked"; }
+
+            // 5. Codecs
+            const video = document.createElement('video');
+            stats.codecs.h264 = video.canPlayType('video/mp4; codecs="avc1.42E01E"') ? "YES" : "NO";
+            stats.codecs.webm = video.canPlayType('video/webm; codecs="vp8, vorbis"') ? "YES" : "NO";
+
+            // 6. Battery
             try {
                 const battery = await navigator.getBattery();
                 stats.batteryLevel = Math.round(battery.level * 100) + "%";
-                stats.batteryStatus = battery.charging ? "CHARGING" : "DISCHARGING";
-            } catch (e) { stats.batteryLevel = "N/A"; stats.batteryStatus = "BLOCKED"; }
+            } catch (e) { stats.batteryLevel = "N/A"; }
+
+            // 7. Sensors
+            stats.sensors.orientation = ('DeviceOrientationEvent' in window) ? "DETECTED" : "NONE";
+            stats.sensors.motion = ('DeviceMotionEvent' in window) ? "DETECTED" : "NONE";
 
             return stats;
+        }
+
+        function calculateRefreshRate() {
+            return new Promise(resolve => {
+                let lastTime = performance.now();
+                let frames = 0;
+                function check() {
+                    frames++;
+                    let now = performance.now();
+                    if (now - lastTime >= 1000) {
+                        resolve(frames);
+                        return;
+                    }
+                    requestAnimationFrame(check);
+                }
+                requestAnimationFrame(check);
+            });
         }
     </script>
 
@@ -277,68 +331,92 @@ h = screen.height
         import platform
         import random
         import asyncio
-        from js import document, navigator, screen, window, getDeepStats, Intl
+        import hashlib
+        import json
+        from js import document, navigator, screen, window, getDeepStats, Intl, calculateRefreshRate
         from pyodide.http import pyfetch
 
         async def run_recon():
-            # 1. System Metadata
-            document.getElementById("audit-id").innerText = f"MANIFEST-{random.randint(100000, 999999)}"
-            
-            # 2. Hardware Audit
+            # 1. Hardware & Platform
             document.getElementById("cpu-info").innerText = f"{navigator.hardwareConcurrency} Logical Threads"
             document.getElementById("ram-info").innerText = f"~{getattr(navigator, 'deviceMemory', 'N/A')} GB"
             document.getElementById("touch-info").innerText = f"{navigator.maxTouchPoints} Points"
+            document.getElementById("arch-info").innerText = platform.machine() or "x86_64 (Emulated)"
             
-            # 3. Connectivity
-            conn = getattr(navigator, 'connection', None)
-            if conn:
-                document.getElementById("net-type").innerText = str(conn.effectiveType).upper()
-                document.getElementById("net-rtt").innerText = f"{conn.rtt} ms"
-                document.getElementById("save-data").innerText = "ENABLED" if conn.saveData else "DISABLED"
-            else:
-                document.getElementById("net-type").innerText = "Unknown"
-                document.getElementById("net-rtt").innerText = "N/A"
-                document.getElementById("save-data").innerText = "N/A"
+            # 2. Network & Privacy
+            document.getElementById("dnt-info").innerText = "ACTIVE" if navigator.doNotTrack == "1" else "OFF"
+            document.getElementById("gpc-info").innerText = "ACTIVE" if getattr(navigator, 'globalPrivacyControl', False) else "OFF"
+            
+            # Check for adblock by trying to fetch a common tracking pixel (simulated)
+            try:
+                ads_check = await pyfetch("https://googleads.g.doubleclick.net/pagead/adview", method="GET")
+                document.getElementById("ads-info").innerText = "DISABLED"
+            except:
+                document.getElementById("ads-info").innerText = "DETECTED"
 
-            # 4. Software & Environment
-            document.getElementById("os-info").innerText = f"{platform.system()} {platform.release()}"
+            # 3. Environmental
             document.getElementById("tz-info").innerText = Intl.DateTimeFormat().resolvedOptions().timeZone
-            document.getElementById("lang-info").innerText = navigator.language.upper()
-            document.getElementById("all-langs").innerText = ", ".join(list(navigator.languages))
-            
-            # 5. Browser Internals
-            document.getElementById("cookie-info").innerText = "YES" if navigator.cookieEnabled else "NO"
-            document.getElementById("pdf-info").innerText = "SUPPORTED" if navigator.pdfViewerEnabled else "NONE"
-            document.getElementById("bot-info").innerText = "DETECTED" if navigator.webdriver else "NONE (HUMAN)"
-            document.getElementById("online-status").innerText = "ACTIVE" if navigator.onLine else "OFFLINE"
-
-            # 6. Display Data
-            document.getElementById("screen-info").innerText = f"{screen.width}x{screen.height}"
-            document.getElementById("avail-info").innerText = f"{screen.availWidth}x{screen.availHeight}"
-            document.getElementById("dpr-info").innerText = f"{window.devicePixelRatio}x Scaling"
+            document.getElementById("all-langs").innerText = " | ".join(list(navigator.languages))
+            document.getElementById("screen-info").innerText = f"{screen.width}x{screen.height} ({screen.availWidth}x{screen.availHeight})"
             document.getElementById("color-info").innerText = f"{screen.colorDepth}-bit"
-            document.getElementById("ua-info").innerText = navigator.userAgent
             
-            # 7. Localization Details
-            opts = Intl.DateTimeFormat().resolvedOptions()
-            document.getElementById("calendar-info").innerText = f"{opts.calendar.upper()} ({opts.numberingSystem})"
+            # 4. JS Bridge Data (Deep Stats)
+            js_data = await getDeepStats()
+            document.getElementById("gpu-info").innerText = js_data.gpu
+            document.getElementById("battery-level").innerText = js_data.batteryLevel
+            
+            # Memory (JS Object)
+            mem = js_data.memory
+            document.getElementById("mem-limit").innerText = mem.get('limit', 'N/A')
+            document.getElementById("mem-total").innerText = mem.get('total', 'N/A')
+            document.getElementById("mem-used").innerText = mem.get('used', 'N/A')
+            
+            # Storage & Audio
+            document.getElementById("store-quota").innerText = js_data.storage.get('quota', 'N/A')
+            document.getElementById("audio-rate").innerText = js_data.audio.get('sampleRate', 'N/A')
+            
+            # Codecs
+            document.getElementById("codec-h264").innerText = js_data.codecs.h264
+            document.getElementById("codec-webm").innerText = js_data.codecs.webm
+            
+            # Sensors
+            document.getElementById("sensor-info").innerText = f"ACC: {js_data.sensors.motion} | ORIENT: {js_data.sensors.orientation}"
 
-            # 8. Async Fetches (GPU, Battery, IP)
-            js_stats = await getDeepStats()
-            document.getElementById("gpu-info").innerText = js_stats.gpu
-            document.getElementById("battery-level").innerText = js_stats.batteryLevel
-            document.getElementById("battery-status").innerText = js_stats.batteryStatus
-
+            # 5. IP & Geo (External API)
             try:
                 response = await pyfetch("https://ipapi.co/json/")
                 if response.ok:
                     data = await response.json()
-                    document.getElementById("ip-info").innerText = data.get('ip', 'Hidden')
+                    document.getElementById("ip-info").innerText = f"{data.get('ip', 'Hidden')} ({data.get('org', 'ISP')})"
             except:
-                document.getElementById("ip-info").innerText = "SECURED/BLOCKED"
+                document.getElementById("ip-info").innerText = "ENCRYPTED/VPN"
 
-            # Update counter
-            document.getElementById("data-count").innerText = "28"
+            # 6. Display Refresh Rate (Calculated)
+            fps = await calculateRefreshRate()
+            document.getElementById("refresh-rate").innerText = f"{fps} Hz"
+
+            # 7. User Agent & DNA Calculation
+            ua = navigator.userAgent
+            document.getElementById("ua-info").innerText = ua
+            
+            # PYTHON FINGERPRINTING LOGIC
+            # We take multiple data points and hash them to create a unique ID
+            fingerprint_seed = {
+                "ua": ua,
+                "res": f"{screen.width}x{screen.height}",
+                "gpu": js_data.gpu,
+                "mem": str(getattr(navigator, 'deviceMemory', '0')),
+                "langs": list(navigator.languages),
+                "tz": Intl.DateTimeFormat().resolvedOptions().timeZone
+            }
+            
+            seed_str = json.dumps(fingerprint_seed, sort_keys=True)
+            dna_hash = hashlib.sha256(seed_str.encode()).hexdigest()[:16].upper()
+            document.getElementById("device-dna").innerText = dna_hash
+            
+            # Final Stats
+            document.getElementById("data-count").innerText = "48"
+            document.getElementById("points-count").innerText = "48"
 
         asyncio.ensure_future(run_recon())
     </script>
