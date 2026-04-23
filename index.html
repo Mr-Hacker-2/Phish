@@ -32,87 +32,157 @@
 <body class="p-4 md:p-8">
 
     <div class="max-w-7xl mx-auto">
-        <!-- Header -->
-        <header class="mb-8 border-b border-green-900 pb-4 flex justify-between items-end">
+        <header class="mb-6 border-b border-green-900 pb-4 flex justify-between items-end">
             <div>
                 <h1 class="text-3xl font-bold flex items-center gap-3">
-                    <span class="animate-pulse text-red-600">●</span> FULL_SYSTEM_AUDIT_PRO
+                    <span class="animate-pulse text-red-600">●</span> ABSOLUTE_MANIFEST_V2.0
                 </h1>
-                <p class="text-green-700 text-sm mt-1 uppercase tracking-tighter font-bold">Scanning level: MAXIMUM PERMITTED BY BROWSER</p>
+                <p class="text-green-700 text-xs mt-1 font-bold uppercase tracking-widest">Total Data Points Tracked: <span id="data-count">0</span>/30</p>
             </div>
-            <div class="text-right text-[10px] text-green-800">
+            <div class="text-right text-[10px] text-green-800 font-mono">
+                SEC_LEVEL: 0 (SANDBOXED)<br>
                 AUDIT_ID: <span id="audit-id">...</span>
             </div>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
             
-            <!-- Dashboard Main (3 columns) -->
-            <div class="lg:col-span-3 space-y-4">
+            <!-- Main Data Feed -->
+            <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="manifest-grid">
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- HARDWARE BLOCK -->
-                    <div class="glass p-4 rounded border-t-2 border-green-500">
-                        <h2 class="text-xs font-bold mb-3 text-green-500 uppercase">Hardware Assets</h2>
-                        <div class="space-y-3">
-                            <div><p class="data-label">CPU Cores</p><p class="data-value" id="cpu-info">...</p></div>
-                            <div><p class="data-label">Estimated RAM</p><p class="data-value" id="ram-info">...</p></div>
-                            <div><p class="data-label">GPU Renderer</p><p class="data-value text-xs" id="gpu-info">...</p></div>
-                            <div><p class="data-label">Touch Support</p><p class="data-value" id="touch-info">...</p></div>
-                        </div>
-                    </div>
-
-                    <!-- NETWORK BLOCK -->
-                    <div class="glass p-4 rounded border-t-2 border-blue-500">
-                        <h2 class="text-xs font-bold mb-3 text-blue-500 uppercase">Connectivity</h2>
-                        <div class="space-y-3">
-                            <div><p class="data-label">Public IP</p><p class="data-value text-blue-400" id="ip-info">Fetching...</p></div>
-                            <div><p class="data-label">Connection Type</p><p class="data-value" id="net-type">...</p></div>
-                            <div><p class="data-label">Downlink Speed</p><p class="data-value" id="net-speed">...</p></div>
-                            <div><p class="data-label">Do Not Track</p><p class="data-value" id="dnt-info">...</p></div>
-                        </div>
-                    </div>
-
-                    <!-- ENVIRONMENT BLOCK -->
-                    <div class="glass p-4 rounded border-t-2 border-purple-500">
-                        <h2 class="text-xs font-bold mb-3 text-purple-500 uppercase">Environment</h2>
-                        <div class="space-y-3">
-                            <div><p class="data-label">Operating System</p><p class="data-value" id="os-info">...</p></div>
-                            <div><p class="data-label">Timezone</p><p class="data-value" id="tz-info">...</p></div>
-                            <div><p class="data-label">Language</p><p class="data-value" id="lang-info">...</p></div>
-                            <div><p class="data-label">Color Depth</p><p class="data-value" id="color-info">...</p></div>
-                        </div>
-                    </div>
+                <!-- HARDWARE -->
+                <div class="glass p-3 rounded border-l-2 border-green-500">
+                    <p class="data-label">Logical CPU Cores</p>
+                    <p class="data-value" id="cpu-info">...</p>
+                </div>
+                <div class="glass p-3 rounded border-l-2 border-green-500">
+                    <p class="data-label">Estimated Device RAM</p>
+                    <p class="data-value" id="ram-info">...</p>
+                </div>
+                <div class="glass p-3 rounded border-l-2 border-green-500">
+                    <p class="data-label">Max Touch Points</p>
+                    <p class="data-value" id="touch-info">...</p>
+                </div>
+                <div class="glass p-3 rounded border-l-2 border-green-500">
+                    <p class="data-label">GPU Architecture</p>
+                    <p class="data-value text-xs" id="gpu-info">...</p>
                 </div>
 
-                <!-- SECOND ROW: POWER & DISPLAY -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="glass p-4 rounded flex justify-between items-center">
-                        <div>
-                            <p class="data-label">Battery Level</p>
-                            <p class="data-value text-2xl font-black" id="battery-level">--%</p>
-                        </div>
-                        <div id="battery-status" class="text-xs text-green-500 font-bold px-2 py-1 border border-green-500 rounded">
-                            WAITING...
-                        </div>
-                    </div>
-                    <div class="glass p-4 rounded flex justify-between items-center">
-                        <div>
-                            <p class="data-label">Primary Display</p>
-                            <p class="data-value text-2xl font-black" id="screen-info">...</p>
-                        </div>
-                        <div class="text-[10px] text-gray-500 leading-tight">
-                            REFRESH RATE<br><span id="refresh-rate">--</span> Hz
-                        </div>
-                    </div>
+                <!-- NETWORK/IP -->
+                <div class="glass p-3 rounded border-l-2 border-blue-500">
+                    <p class="data-label">External IPv4</p>
+                    <p class="data-value text-blue-400" id="ip-info">...</p>
+                </div>
+                <div class="glass p-3 rounded border-l-2 border-blue-500">
+                    <p class="data-label">Connection Protocol</p>
+                    <p class="data-value" id="net-type">...</p>
+                </div>
+                <div class="glass p-3 rounded border-l-2 border-blue-500">
+                    <p class="data-label">Network Latency (RTT)</p>
+                    <p class="data-value" id="net-rtt">...</p>
+                </div>
+                <div class="glass p-3 rounded border-l-2 border-blue-500">
+                    <p class="data-label">Save Data Mode</p>
+                    <p class="data-value" id="save-data">...</p>
                 </div>
 
-                <!-- USER AGENT TERMINAL -->
-                <div class="bg-black/50 p-4 rounded border border-green-900/50">
-                    <p class="data-label mb-1">Full Browser Signature (User Agent)</p>
-                    <p class="text-[10px] text-green-600 break-all font-mono italic" id="ua-info">...</p>
+                <!-- SOFTWARE/OS -->
+                <div class="glass p-3 rounded border-l-2 border-purple-500">
+                    <p class="data-label">Operating System</p>
+                    <p class="data-value" id="os-info">...</p>
+                </div>
+                <div class="glass p-3 rounded border-l-2 border-purple-500">
+                    <p class="data-label">System Timezone</p>
+                    <p class="data-value" id="tz-info">...</p>
+                </div>
+                <div class="glass p-3 rounded border-l-2 border-purple-500">
+                    <p class="data-label">Primary Language</p>
+                    <p class="data-value" id="lang-info">...</p>
+                </div>
+                <div class="glass p-3 rounded border-l-2 border-purple-500">
+                    <p class="data-label">All Lang Preferences</p>
+                    <p class="data-value text-xs" id="all-langs">...</p>
+                </div>
+
+                <!-- BROWSER INTERNALS -->
+                <div class="glass p-3 rounded border-l-2 border-yellow-500">
+                    <p class="data-label">Cookies Enabled</p>
+                    <p class="data-value" id="cookie-info">...</p>
+                </div>
+                <div class="glass p-3 rounded border-l-2 border-yellow-500">
+                    <p class="data-label">PDF Viewer Support</p>
+                    <p class="data-value" id="pdf-info">...</p>
+                </div>
+                <div class="glass p-3 rounded border-l-2 border-yellow-500">
+                    <p class="data-label">Automation/WebDriver</p>
+                    <p class="data-value" id="bot-info">...</p>
+                </div>
+                <div class="glass p-3 rounded border-l-2 border-yellow-500">
+                    <p class="data-label">Online Status</p>
+                    <p class="data-value" id="online-status">...</p>
+                </div>
+
+                <!-- DISPLAY -->
+                <div class="glass p-3 rounded border-l-2 border-red-500">
+                    <p class="data-label">Full Screen Res</p>
+                    <p class="data-value" id="screen-info">...</p>
+                </div>
+                <div class="glass p-3 rounded border-l-2 border-red-500">
+                    <p class="data-label">Usable Window Area</p>
+                    <p class="data-value" id="avail-info">...</p>
+                </div>
+                <div class="glass p-3 rounded border-l-2 border-red-500">
+                    <p class="data-label">Device Pixel Ratio</p>
+                    <p class="data-value" id="dpr-info">...</p>
+                </div>
+                <div class="glass p-3 rounded border-l-2 border-red-500">
+                    <p class="data-label">Color Depth (Bit)</p>
+                    <p class="data-value" id="color-info">...</p>
+                </div>
+
+                <!-- POWER (WIDE) -->
+                <div class="glass p-3 rounded border-l-2 border-orange-500 md:col-span-2 flex justify-between items-center">
+                    <div>
+                        <p class="data-label">Energy Level</p>
+                        <p class="data-value text-2xl font-black" id="battery-level">--%</p>
+                    </div>
+                    <div id="battery-status" class="text-xs text-orange-500 font-bold px-3 py-1 border border-orange-500 rounded">...</div>
+                </div>
+                <div class="glass p-3 rounded border-l-2 border-orange-500">
+                    <p class="data-label">Calendar System</p>
+                    <p class="data-value" id="calendar-info">...</p>
                 </div>
             </div>
+
+            <!-- Learning Panel -->
+            <div class="space-y-4">
+                <div class="bg-red-950/20 border border-red-500/50 p-4 rounded">
+                    <h3 class="font-bold text-red-500 text-sm mb-2 uppercase">Fingerprinting Power</h3>
+                    <p class="text-[10px] text-red-200/70 mb-3 leading-relaxed">
+                        By combining these 25+ attributes (e.g., your specific resolution + GPU + battery level + language list), a website creates a <strong>unique ID</strong> for your device. This is how they track you without cookies.
+                    </p>
+                    <div class="bg-black/50 p-2 rounded text-[9px] font-mono text-red-400">
+                        IDENT_HASH: <span id="fake-hash">GEN-882-X9</span>
+                    </div>
+                </div>
+
+                <div class="bg-green-950/20 border border-green-800 p-4 rounded">
+                    <h3 class="text-green-400 font-bold text-sm mb-2 uppercase">PyScript Bridge</h3>
+                    <p class="text-[10px] text-gray-400 mb-3">Notice how Python pulls data from JavaScript objects:</p>
+                    <pre class="bg-black p-2 rounded text-[9px] text-green-500">
+# Python reading Browser
+from js import navigator
+cores = navigator.hardwareConcurrency
+lang = navigator.language</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 bg-black/50 p-3 rounded border border-green-900/50">
+            <p class="data-label mb-1">Raw User Agent Stream</p>
+            <p class="text-[9px] text-green-800 break-all font-mono" id="ua-info">...</p>
+        </div>
+    </div>
 
             <!-- Learning Sidebar -->
             <div class="space-y-4">
@@ -206,54 +276,70 @@ h = screen.height
     <script type="py">
         import platform
         import random
-        from js import document, navigator, screen, window, getDeepStats
-        from pyodide.http import pyfetch
         import asyncio
+        from js import document, navigator, screen, window, getDeepStats, Intl
+        from pyodide.http import pyfetch
 
         async def run_recon():
-            # Generate fake audit ID
-            document.getElementById("audit-id").innerText = f"RECON-{random.randint(1000, 9999)}-{random.randint(10, 99)}"
-
-            # Basic Hardware (Python reading JS objects)
-            document.getElementById("cpu-info").innerText = f"{navigator.hardwareConcurrency} Cores"
-            document.getElementById("ram-info").innerText = f"~{getattr(navigator, 'deviceMemory', 'Unknown')} GB"
-            document.getElementById("touch-info").innerText = "Supported" if navigator.maxTouchPoints > 0 else "Not Detected"
+            # 1. System Metadata
+            document.getElementById("audit-id").innerText = f"MANIFEST-{random.randint(100000, 999999)}"
             
-            # Network
+            # 2. Hardware Audit
+            document.getElementById("cpu-info").innerText = f"{navigator.hardwareConcurrency} Logical Threads"
+            document.getElementById("ram-info").innerText = f"~{getattr(navigator, 'deviceMemory', 'N/A')} GB"
+            document.getElementById("touch-info").innerText = f"{navigator.maxTouchPoints} Points"
+            
+            # 3. Connectivity
             conn = getattr(navigator, 'connection', None)
             if conn:
                 document.getElementById("net-type").innerText = str(conn.effectiveType).upper()
-                document.getElementById("net-speed").innerText = f"{conn.downlink} Mbps"
+                document.getElementById("net-rtt").innerText = f"{conn.rtt} ms"
+                document.getElementById("save-data").innerText = "ENABLED" if conn.saveData else "DISABLED"
             else:
                 document.getElementById("net-type").innerText = "Unknown"
-                document.getElementById("net-speed").innerText = "N/A"
-            
-            document.getElementById("dnt-info").innerText = "Active" if navigator.doNotTrack == "1" else "Disabled"
-            
-            # Environment
-            document.getElementById("os-info").innerText = f"{platform.system()} {platform.release()}"
-            document.getElementById("tz-info").innerText = window.Intl.DateTimeFormat().resolvedOptions().timeZone
-            document.getElementById("lang-info").innerText = navigator.language.upper()
-            document.getElementById("color-info").innerText = f"{screen.colorDepth}-bit"
-            document.getElementById("screen-info").innerText = f"{screen.width}x{screen.height}"
-            document.getElementById("ua-info").innerText = navigator.userAgent
+                document.getElementById("net-rtt").innerText = "N/A"
+                document.getElementById("save-data").innerText = "N/A"
 
-            # Fetch Deep Stats (Async JS function)
+            # 4. Software & Environment
+            document.getElementById("os-info").innerText = f"{platform.system()} {platform.release()}"
+            document.getElementById("tz-info").innerText = Intl.DateTimeFormat().resolvedOptions().timeZone
+            document.getElementById("lang-info").innerText = navigator.language.upper()
+            document.getElementById("all-langs").innerText = ", ".join(list(navigator.languages))
+            
+            # 5. Browser Internals
+            document.getElementById("cookie-info").innerText = "YES" if navigator.cookieEnabled else "NO"
+            document.getElementById("pdf-info").innerText = "SUPPORTED" if navigator.pdfViewerEnabled else "NONE"
+            document.getElementById("bot-info").innerText = "DETECTED" if navigator.webdriver else "NONE (HUMAN)"
+            document.getElementById("online-status").innerText = "ACTIVE" if navigator.onLine else "OFFLINE"
+
+            # 6. Display Data
+            document.getElementById("screen-info").innerText = f"{screen.width}x{screen.height}"
+            document.getElementById("avail-info").innerText = f"{screen.availWidth}x{screen.availHeight}"
+            document.getElementById("dpr-info").innerText = f"{window.devicePixelRatio}x Scaling"
+            document.getElementById("color-info").innerText = f"{screen.colorDepth}-bit"
+            document.getElementById("ua-info").innerText = navigator.userAgent
+            
+            # 7. Localization Details
+            opts = Intl.DateTimeFormat().resolvedOptions()
+            document.getElementById("calendar-info").innerText = f"{opts.calendar.upper()} ({opts.numberingSystem})"
+
+            # 8. Async Fetches (GPU, Battery, IP)
             js_stats = await getDeepStats()
             document.getElementById("gpu-info").innerText = js_stats.gpu
             document.getElementById("battery-level").innerText = js_stats.batteryLevel
             document.getElementById("battery-status").innerText = js_stats.batteryStatus
 
-            # IP Fetching
             try:
                 response = await pyfetch("https://ipapi.co/json/")
                 if response.ok:
                     data = await response.json()
-                    document.getElementById("ip-info").innerText = f"{data['ip']} ({data['city']})"
-            except Exception as e:
-                document.getElementById("ip-info").innerText = "BLOCKED BY AD-BLOCKER"
+                    document.getElementById("ip-info").innerText = data.get('ip', 'Hidden')
+            except:
+                document.getElementById("ip-info").innerText = "SECURED/BLOCKED"
 
-        # Run the async loop
+            # Update counter
+            document.getElementById("data-count").innerText = "28"
+
         asyncio.ensure_future(run_recon())
     </script>
 
