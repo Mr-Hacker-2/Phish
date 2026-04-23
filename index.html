@@ -3,323 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Recon & Learning Tool</title>
-    <!-- Tailwind CSS -->
+    <title>Deep Forensic System Audit</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- PyScript CSS & JS -->
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500;700&display=swap');
         body {
             background-color: #050505;
             color: #00ff41;
             font-family: 'Fira Code', monospace;
+            overflow-x: hidden;
         }
         .glass {
             background: rgba(20, 20, 20, 0.8);
             backdrop-filter: blur(10px);
-            border: 1px solid #333;
+            border: 1px solid #1a1a1a;
+            transition: all 0.3s ease;
         }
-        .data-label { color: #888; font-size: 0.75rem; text-transform: uppercase; }
-        .data-value { color: #fff; font-size: 1.1rem; }
-        .terminal-glow {
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+        .glass:hover {
+            border-color: #00ff41;
+            background: rgba(0, 255, 65, 0.05);
         }
+        .data-label { color: #555; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; }
+        .data-value { color: #fff; font-size: 0.95rem; font-weight: 500; }
+        .terminal-header {
+            background: linear-gradient(90deg, #001a00 0%, #000 100%);
+            border-bottom: 1px solid #004400;
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #004400; }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-4 md:p-6">
 
     <div class="max-w-7xl mx-auto">
-        <header class="mb-6 border-b border-green-900 pb-4 flex justify-between items-end">
+        <!-- HEADER -->
+        <header class="mb-6 pb-4 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-green-900/50">
             <div>
-                <h1 class="text-3xl font-bold flex items-center gap-3">
-                    <span class="animate-pulse text-green-500">●</span> SYSTEM_FORENSICS_DEEP_SCAN
+                <h1 class="text-2xl font-black flex items-center gap-3 tracking-tighter">
+                    <span class="animate-pulse text-red-500">●</span> SYSTEM_FORENSICS_DEEP_SCAN
                 </h1>
-                <p class="text-green-700 text-[10px] mt-1 font-bold uppercase tracking-[0.3em]">Total Intelligence Points: <span id="data-count">0</span>/50</p>
+                <p class="text-green-800 text-[9px] mt-1 font-bold uppercase tracking-[0.4em]">Intelligence Capture Level: <span id="data-count">0</span>/50 Points</p>
             </div>
-            <div class="text-right">
-                <div class="bg-green-900/30 px-3 py-1 rounded text-[10px] font-mono text-green-400 border border-green-500/30">
-                    DEVICE_DNA: <span id="device-dna">CALCULATING...</span>
+            <div class="flex flex-col items-end gap-1">
+                <div class="bg-green-950/40 px-3 py-1 rounded text-[10px] font-mono text-green-400 border border-green-500/30">
+                    DEVICE_DNA: <span id="device-dna" class="text-white">INITIALIZING...</span>
                 </div>
+                <div class="text-[8px] text-green-900 font-mono">ENCRYPTION: SHA-256 | STATUS: SANDBOX_ENFORCED</div>
             </div>
         </header>
 
-        <!-- GRID SYSTEM -->
+        <!-- DASHBOARD GRID -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3" id="manifest-grid">
             
-            <!-- CATEGORY: CORE HARDWARE -->
-            <div class="lg:col-span-4 bg-green-500/10 p-2 text-[10px] font-bold uppercase tracking-widest text-green-500 border-l-4 border-green-500">Core Hardware & Architecture</div>
+            <!-- HARDWARE -->
+            <div class="lg:col-span-4 py-1 text-[9px] font-bold uppercase tracking-widest text-green-500 flex items-center gap-2">
+                <div class="h-px bg-green-500/30 flex-grow"></div> [01] CORE HARDWARE & ARCHITECTURE <div class="h-px bg-green-500/30 flex-grow"></div>
+            </div>
             <div class="glass p-3 rounded">
-                <p class="data-label">CPU Threads</p><p class="data-value" id="cpu-info">...</p>
+                <p class="data-label">Logical Threads</p><p class="data-value" id="cpu-info">...</p>
             </div>
             <div class="glass p-3 rounded">
                 <p class="data-label">Device RAM</p><p class="data-value" id="ram-info">...</p>
             </div>
             <div class="glass p-3 rounded">
-                <p class="data-label">GPU Model</p><p class="data-value text-[10px]" id="gpu-info">...</p>
+                <p class="data-label">GPU Renderer</p><p class="data-value text-[10px]" id="gpu-info">...</p>
             </div>
             <div class="glass p-3 rounded">
-                <p class="data-label">Architecture</p><p class="data-value" id="arch-info">...</p>
+                <p class="data-label">Platform Arch</p><p class="data-value" id="arch-info">...</p>
             </div>
 
-            <!-- CATEGORY: MEMORY & STORAGE -->
-            <div class="lg:col-span-4 bg-blue-500/10 p-2 text-[10px] font-bold uppercase tracking-widest text-blue-500 border-l-4 border-blue-500 mt-2">Memory & Storage Diagnostics</div>
-            <div class="glass p-3 rounded">
-                <p class="data-label">JS Heap Limit</p><p class="data-value" id="mem-limit">...</p>
+            <!-- MEMORY -->
+            <div class="lg:col-span-4 py-1 text-[9px] font-bold uppercase tracking-widest text-blue-500 flex items-center gap-2 mt-2">
+                <div class="h-px bg-blue-500/30 flex-grow"></div> [02] MEMORY & STORAGE DIAGNOSTICS <div class="h-px bg-blue-500/30 flex-grow"></div>
             </div>
             <div class="glass p-3 rounded">
-                <p class="data-label">Heap Total</p><p class="data-value" id="mem-total">...</p>
+                <p class="data-label">Heap Limit</p><p class="data-value" id="mem-limit">...</p>
             </div>
             <div class="glass p-3 rounded">
-                <p class="data-label">Used Heap</p><p class="data-value text-blue-400" id="mem-used">...</p>
+                <p class="data-label">Heap Allocated</p><p class="data-value" id="mem-total">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Heap In-Use</p><p class="data-value text-blue-400" id="mem-used">...</p>
             </div>
             <div class="glass p-3 rounded">
                 <p class="data-label">Storage Quota</p><p class="data-value" id="store-quota">...</p>
             </div>
 
-            <!-- CATEGORY: MEDIA & AUDIO -->
-            <div class="lg:col-span-4 bg-purple-500/10 p-2 text-[10px] font-bold uppercase tracking-widest text-purple-500 border-l-4 border-purple-500 mt-2">Media & Sensor Capabilities</div>
+            <!-- MEDIA -->
+            <div class="lg:col-span-4 py-1 text-[9px] font-bold uppercase tracking-widest text-purple-500 flex items-center gap-2 mt-2">
+                <div class="h-px bg-purple-500/30 flex-grow"></div> [03] MEDIA & SENSOR CAPABILITIES <div class="h-px bg-purple-500/30 flex-grow"></div>
+            </div>
             <div class="glass p-3 rounded">
                 <p class="data-label">Audio Sample Rate</p><p class="data-value" id="audio-rate">...</p>
             </div>
             <div class="glass p-3 rounded">
-                <p class="data-label">H.264 Support</p><p class="data-value" id="codec-h264">...</p>
+                <p class="data-label">Video H.264</p><p class="data-value" id="codec-h264">...</p>
             </div>
             <div class="glass p-3 rounded">
-                <p class="data-label">WebM Support</p><p class="data-value" id="codec-webm">...</p>
+                <p class="data-label">Video WebM</p><p class="data-value" id="codec-webm">...</p>
             </div>
             <div class="glass p-3 rounded">
-                <p class="data-label">Motion Sensors</p><p class="data-value text-xs" id="sensor-info">...</p>
+                <p class="data-label">Sensors Detect</p><p class="data-value text-[10px]" id="sensor-info">...</p>
             </div>
 
-            <!-- CATEGORY: NETWORK & PRIVACY -->
-            <div class="lg:col-span-4 bg-red-500/10 p-2 text-[10px] font-bold uppercase tracking-widest text-red-500 border-l-4 border-red-500 mt-2">Network & Privacy Signals</div>
+            <!-- NETWORK -->
+            <div class="lg:col-span-4 py-1 text-[9px] font-bold uppercase tracking-widest text-red-500 flex items-center gap-2 mt-2">
+                <div class="h-px bg-red-500/30 flex-grow"></div> [04] NETWORK & PRIVACY SIGNALS <div class="h-px bg-red-500/30 flex-grow"></div>
+            </div>
             <div class="glass p-3 rounded">
                 <p class="data-label">Public IPv4</p><p class="data-value text-red-400" id="ip-info">...</p>
             </div>
             <div class="glass p-3 rounded">
-                <p class="data-label">DNT Header</p><p class="data-value" id="dnt-info">...</p>
+                <p class="data-label">Tracking Signals</p><p class="data-value text-[10px]" id="track-signals">...</p>
             </div>
             <div class="glass p-3 rounded">
-                <p class="data-label">GPC Signal</p><p class="data-value" id="gpc-info">...</p>
+                <p class="data-label">ISP/Organization</p><p class="data-value text-[10px]" id="isp-info">...</p>
             </div>
             <div class="glass p-3 rounded">
-                <p class="data-label">Ad-Block Detected</p><p class="data-value" id="ads-info">...</p>
+                <p class="data-label">Ad-Blocker</p><p class="data-value" id="ads-info">...</p>
             </div>
 
-            <!-- CATEGORY: DISPLAY & INPUT -->
-            <div class="lg:col-span-4 bg-yellow-500/10 p-2 text-[10px] font-bold uppercase tracking-widest text-yellow-500 border-l-4 border-yellow-500 mt-2">Display & Human Interface</div>
+            <!-- DISPLAY -->
+            <div class="lg:col-span-4 py-1 text-[9px] font-bold uppercase tracking-widest text-yellow-500 flex items-center gap-2 mt-2">
+                <div class="h-px bg-yellow-500/30 flex-grow"></div> [05] DISPLAY & HUMAN INTERFACE <div class="h-px bg-yellow-500/30 flex-grow"></div>
+            </div>
             <div class="glass p-3 rounded">
                 <p class="data-label">Resolution</p><p class="data-value" id="screen-info">...</p>
             </div>
             <div class="glass p-3 rounded">
+                <p class="data-label">Refresh Rate</p><p class="data-value" id="refresh-rate">...</p>
+            </div>
+            <div class="glass p-3 rounded">
+                <p class="data-label">Touch Interface</p><p class="data-value" id="touch-info">...</p>
+            </div>
+            <div class="glass p-3 rounded">
                 <p class="data-label">Color Depth</p><p class="data-value" id="color-info">...</p>
             </div>
-            <div class="glass p-3 rounded">
-                <p class="data-label">Refresh Rate (Est)</p><p class="data-value" id="refresh-rate">...</p>
-            </div>
-            <div class="glass p-3 rounded">
-                <p class="data-label">Touch Points</p><p class="data-value" id="touch-info">...</p>
-            </div>
 
-            <!-- CATEGORY: POWER & LOCALIZATION -->
-            <div class="lg:col-span-4 bg-orange-500/10 p-2 text-[10px] font-bold uppercase tracking-widest text-orange-500 border-l-4 border-orange-500 mt-2">System Context</div>
-            <div class="glass p-3 rounded">
-                <p class="data-label">Battery Level</p><p class="data-value" id="battery-level">...</p>
+            <!-- CONTEXT -->
+            <div class="lg:col-span-4 py-1 text-[9px] font-bold uppercase tracking-widest text-orange-500 flex items-center gap-2 mt-2">
+                <div class="h-px bg-orange-500/30 flex-grow"></div> [06] LOCALIZATION & POWER <div class="h-px bg-orange-500/30 flex-grow"></div>
             </div>
             <div class="glass p-3 rounded">
-                <p class="data-label">Timezone</p><p class="data-value text-xs" id="tz-info">...</p>
+                <p class="data-label">Energy Level</p><p class="data-value" id="battery-level">...</p>
             </div>
             <div class="glass p-3 rounded">
-                <p class="data-label">Language List</p><p class="data-value text-[10px]" id="all-langs">...</p>
+                <p class="data-label">System Timezone</p><p class="data-value text-[10px]" id="tz-info">...</p>
             </div>
-            <div class="glass p-3 rounded">
-                <p class="data-label">Incognito Est.</p><p class="data-value" id="incognito-info">...</p>
+            <div class="glass p-3 rounded lg:col-span-2">
+                <p class="data-label">Language Preferences</p><p class="data-value text-[10px]" id="all-langs">...</p>
             </div>
         </div>
 
-        <!-- FOOTER LOGS -->
-        <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div class="bg-black/50 p-4 rounded border border-green-900/50">
-                <h3 class="data-label mb-2 text-green-500">Browser Environment Signature</h3>
-                <div class="text-[9px] font-mono text-green-700 break-all leading-relaxed" id="ua-info">...</div>
-            </div>
-            <div class="bg-black/50 p-4 rounded border border-blue-900/50">
-                <h3 class="data-label mb-2 text-blue-500">Security Sandbox Analysis</h3>
-                <p class="text-[10px] text-gray-400">
-                    Total information points retrieved via Python: <span class="text-white" id="points-count">0</span>. 
-                    Encryption used for DNA: <span class="text-white font-mono">SHA-256</span>.
-                    Direct disk access: <span class="text-red-500 font-bold uppercase">Blocked by Browser</span>.
-                </p>
+        <!-- RAW DATA LOG -->
+        <div class="mt-6">
+            <div class="bg-black p-4 rounded border border-green-900/30">
+                <p class="data-label mb-2 text-green-700">User Agent Signature</p>
+                <div class="text-[9px] font-mono text-green-800 break-all leading-relaxed" id="ua-info">...</div>
             </div>
         </div>
+
+        <footer class="mt-8 text-center text-[10px] text-gray-700 uppercase tracking-widest border-t border-gray-900 pt-4">
+            Security Learning Tool &copy; 2026 | Sandboxed Python Environment
+        </footer>
     </div>
 
-            <!-- Learning Panel -->
-            <div class="space-y-4">
-                <div class="bg-red-950/20 border border-red-500/50 p-4 rounded">
-                    <h3 class="font-bold text-red-500 text-sm mb-2 uppercase">Fingerprinting Power</h3>
-                    <p class="text-[10px] text-red-200/70 mb-3 leading-relaxed">
-                        By combining these 25+ attributes (e.g., your specific resolution + GPU + battery level + language list), a website creates a <strong>unique ID</strong> for your device. This is how they track you without cookies.
-                    </p>
-                    <div class="bg-black/50 p-2 rounded text-[9px] font-mono text-red-400">
-                        IDENT_HASH: <span id="fake-hash">GEN-882-X9</span>
-                    </div>
-                </div>
-
-                <div class="bg-green-950/20 border border-green-800 p-4 rounded">
-                    <h3 class="text-green-400 font-bold text-sm mb-2 uppercase">PyScript Bridge</h3>
-                    <p class="text-[10px] text-gray-400 mb-3">Notice how Python pulls data from JavaScript objects:</p>
-                    <pre class="bg-black p-2 rounded text-[9px] text-green-500">
-# Python reading Browser
-from js import navigator
-cores = navigator.hardwareConcurrency
-lang = navigator.language</pre>
-                </div>
-            </div>
-        </div>
-
-        <div class="mt-4 bg-black/50 p-3 rounded border border-green-900/50">
-            <p class="data-label mb-1">Raw User Agent Stream</p>
-            <p class="text-[9px] text-green-800 break-all font-mono" id="ua-info">...</p>
-        </div>
-    </div>
-
-            <!-- Learning Sidebar -->
-            <div class="space-y-4">
-                <div class="bg-red-950/20 border border-red-500/50 p-4 rounded text-xs">
-                    <h3 class="font-bold text-red-500 mb-2 uppercase">The Hard Truth</h3>
-                    <p class="mb-2">Even with Python, a browser <span class="text-white underline">cannot</span> see:</p>
-                    <ul class="list-disc list-inside text-red-200/60 space-y-1">
-                        <li>Your MAC Address</li>
-                        <li>Your CPU Serial Number</li>
-                        <li>Your Files/Documents</li>
-                        <li>Your Installed Apps</li>
-                    </ul>
-                    <p class="mt-2 text-[10px] italic text-red-400">This is called "Sandboxing". It is the primary defense of the internet.</p>
-                </div>
-
-                <div class="bg-green-950/20 border border-green-800 p-4 rounded text-[10px]">
-                    <h3 class="text-green-400 font-bold mb-2 uppercase">Python "Requests" Simulation</h3>
-                    <p class="text-gray-400 mb-2">In real Python, you'd use <code class="text-green-300">requests.get()</code>. Here we use PyScript's fetch:</p>
-                    <pre class="bg-black p-2 rounded text-green-500 overflow-x-auto">
-from pyodide.http import pyfetch
-response = await pyfetch(
-  "https://ipapi.co/json/"
-)
-data = await response.json()
-print(data['ip'])</pre>
-                </div>
-            </div>
-        </div>
-    </div>
-
-            <!-- Learning Sidebar -->
-            <div class="space-y-6">
-                <div class="bg-blue-950/30 border border-blue-500/50 p-6 rounded-lg">
-                    <h3 class="text-blue-400 font-bold mb-3 uppercase tracking-wider text-sm">How this works (Learning)</h3>
-                    <div class="text-xs text-blue-200/80 space-y-4">
-                        <p>
-                            <strong class="text-blue-300">The Bridge:</strong> This site uses <span class="text-white italic">PyScript</span>. It allows Python to talk to your browser via a JavaScript "bridge".
-                        </p>
-                        <p>
-                            <strong class="text-blue-300">The Sandbox:</strong> Notice we can see your screen size and CPU count, but <span class="text-red-400">NOT</span> your files, name, or IP address (directly). Browsers prevent "sandboxed" code from touching your hard drive.
-                        </p>
-                        <p>
-                            <strong class="text-blue-300">Local Python:</strong> If you ran this same code as a <code class="bg-black p-1">.py</code> file on your desktop, you could use <code class="text-white">os.listdir('/')</code> to see every file on your computer.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="bg-green-950/20 border border-green-800 p-6 rounded-lg">
-                    <h3 class="text-green-400 font-bold mb-3 uppercase tracking-wider text-sm">Python Snippet Used</h3>
-                    <pre class="text-[10px] text-green-200/60 overflow-x-auto">
-import platform
-from js import navigator, screen
-
-# Get OS
-os = platform.system()
-# Get Hardware Cores
-cores = navigator.hardwareConcurrency
-# Get Dimensions
-w = screen.width
-h = screen.height
-                    </pre>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <!-- JS HELPERS -->
     <script>
-        // JS Helper for advanced browser forensics
         async function getDeepStats() {
             const stats = {
-                codecs: {},
+                gpu: "Unknown",
                 memory: {},
                 storage: {},
-                sensors: {},
-                audio: {}
+                audio: {},
+                codecs: {},
+                battery: "N/A",
+                sensors: {}
             };
             
-            // 1. GPU Info
             try {
                 const canvas = document.createElement('canvas');
-                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                const gl = canvas.getContext('webgl');
                 const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
                 stats.gpu = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-            } catch (e) { stats.gpu = "Restricted"; }
+            } catch (e) {}
 
-            // 2. Memory (Chrome only)
             if (window.performance && window.performance.memory) {
-                stats.memory.total = Math.round(performance.memory.totalJSHeapSize / 1048576) + "MB";
-                stats.memory.used = Math.round(performance.memory.usedJSHeapSize / 1048576) + "MB";
-                stats.memory.limit = Math.round(performance.memory.jsHeapSizeLimit / 1048576) + "MB";
+                stats.memory = {
+                    total: Math.round(performance.memory.totalJSHeapSize / 1048576) + "MB",
+                    used: Math.round(performance.memory.usedJSHeapSize / 1048576) + "MB",
+                    limit: Math.round(performance.memory.jsHeapSizeLimit / 1048576) + "MB"
+                };
             }
 
-            // 3. Storage
             try {
                 const estimate = await navigator.storage.estimate();
                 stats.storage.quota = Math.round(estimate.quota / 1073741824) + "GB";
-            } catch (e) { stats.storage.quota = "Denied"; }
+            } catch (e) {}
 
-            // 4. Audio
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 stats.audio.sampleRate = audioCtx.sampleRate + "Hz";
                 audioCtx.close();
-            } catch (e) { stats.audio.sampleRate = "Blocked"; }
+            } catch (e) {}
 
-            // 5. Codecs
-            const video = document.createElement('video');
-            stats.codecs.h264 = video.canPlayType('video/mp4; codecs="avc1.42E01E"') ? "YES" : "NO";
-            stats.codecs.webm = video.canPlayType('video/webm; codecs="vp8, vorbis"') ? "YES" : "NO";
+            const v = document.createElement('video');
+            stats.codecs.h264 = v.canPlayType('video/mp4; codecs="avc1.42E01E"') ? "YES" : "NO";
+            stats.codecs.webm = v.canPlayType('video/webm; codecs="vp8, vorbis"') ? "YES" : "NO";
 
-            // 6. Battery
             try {
-                const battery = await navigator.getBattery();
-                stats.batteryLevel = Math.round(battery.level * 100) + "%";
-            } catch (e) { stats.batteryLevel = "N/A"; }
+                const b = await navigator.getBattery();
+                stats.battery = Math.round(b.level * 100) + "%";
+            } catch (e) {}
 
-            // 7. Sensors
-            stats.sensors.orientation = ('DeviceOrientationEvent' in window) ? "DETECTED" : "NONE";
-            stats.sensors.motion = ('DeviceMotionEvent' in window) ? "DETECTED" : "NONE";
+            stats.sensors = {
+                motion: ('DeviceMotionEvent' in window) ? "YES" : "NO",
+                orientation: ('DeviceOrientationEvent' in window) ? "YES" : "NO"
+            };
 
             return stats;
         }
 
         function calculateRefreshRate() {
-            return new Promise(resolve => {
-                let lastTime = performance.now();
-                let frames = 0;
+            return new Promise(r => {
+                let last = performance.now(), frames = 0;
                 function check() {
                     frames++;
                     let now = performance.now();
-                    if (now - lastTime >= 1000) {
-                        resolve(frames);
-                        return;
-                    }
+                    if (now - last >= 1000) return r(frames);
                     requestAnimationFrame(check);
                 }
                 requestAnimationFrame(check);
@@ -327,6 +241,7 @@ h = screen.height
         }
     </script>
 
+    <!-- PYTHON FORENSICS -->
     <script type="py">
         import platform
         import random
@@ -337,89 +252,76 @@ h = screen.height
         from pyodide.http import pyfetch
 
         async def run_recon():
-            # 1. Hardware & Platform
-            document.getElementById("cpu-info").innerText = f"{navigator.hardwareConcurrency} Logical Threads"
+            # 1. CORE DATA (PYTHON -> JS DOM)
+            document.getElementById("cpu-info").innerText = f"{navigator.hardwareConcurrency} Cores"
             document.getElementById("ram-info").innerText = f"~{getattr(navigator, 'deviceMemory', 'N/A')} GB"
-            document.getElementById("touch-info").innerText = f"{navigator.maxTouchPoints} Points"
-            document.getElementById("arch-info").innerText = platform.machine() or "x86_64 (Emulated)"
-            
-            # 2. Network & Privacy
-            document.getElementById("dnt-info").innerText = "ACTIVE" if navigator.doNotTrack == "1" else "OFF"
-            document.getElementById("gpc-info").innerText = "ACTIVE" if getattr(navigator, 'globalPrivacyControl', False) else "OFF"
-            
-            # Check for adblock by trying to fetch a common tracking pixel (simulated)
-            try:
-                ads_check = await pyfetch("https://googleads.g.doubleclick.net/pagead/adview", method="GET")
-                document.getElementById("ads-info").innerText = "DISABLED"
-            except:
-                document.getElementById("ads-info").innerText = "DETECTED"
-
-            # 3. Environmental
+            document.getElementById("arch-info").innerText = platform.machine() or "x86_64"
             document.getElementById("tz-info").innerText = Intl.DateTimeFormat().resolvedOptions().timeZone
             document.getElementById("all-langs").innerText = " | ".join(list(navigator.languages))
-            document.getElementById("screen-info").innerText = f"{screen.width}x{screen.height} ({screen.availWidth}x{screen.availHeight})"
-            document.getElementById("color-info").innerText = f"{screen.colorDepth}-bit"
+            document.getElementById("screen-info").innerText = f"{screen.width}x{screen.height}"
+            document.getElementById("color-info").innerText = f"{screen.colorDepth}-Bit"
+            document.getElementById("touch-info").innerText = f"{navigator.maxTouchPoints} Points"
+            document.getElementById("ua-info").innerText = navigator.userAgent
+
+            # 2. PRIVACY & SIGNALS
+            dnt = "DNT:ON" if navigator.doNotTrack == "1" else "DNT:OFF"
+            gpc = "GPC:ON" if getattr(navigator, 'globalPrivacyControl', False) else "GPC:OFF"
+            document.getElementById("track-signals").innerText = f"{dnt} | {gpc}"
+
+            try:
+                await pyfetch("https://googleads.g.doubleclick.net/pagead/adview")
+                document.getElementById("ads-info").innerText = "CLEAN"
+            except:
+                document.getElementById("ads-info").innerText = "ACTIVE"
+
+            # 3. ASYNC DEEP STATS
+            js_data_raw = await getDeepStats()
+            js_data = js_data_raw.to_py() # CONVERT TO PYTHON DICT TO AVOID ATTRIBUTE ERRORS
+
+            document.getElementById("gpu-info").innerText = js_data.get('gpu', 'Unknown')
+            document.getElementById("battery-level").innerText = js_data.get('battery', 'N/A')
             
-            # 4. JS Bridge Data (Deep Stats)
-            js_data = await getDeepStats()
-            document.getElementById("gpu-info").innerText = js_data.gpu
-            document.getElementById("battery-level").innerText = js_data.batteryLevel
-            
-            # Memory (JS Object)
-            mem = js_data.memory
+            # Memory Details
+            mem = js_data.get('memory', {})
             document.getElementById("mem-limit").innerText = mem.get('limit', 'N/A')
             document.getElementById("mem-total").innerText = mem.get('total', 'N/A')
             document.getElementById("mem-used").innerText = mem.get('used', 'N/A')
-            
+
             # Storage & Audio
-            document.getElementById("store-quota").innerText = js_data.storage.get('quota', 'N/A')
-            document.getElementById("audio-rate").innerText = js_data.audio.get('sampleRate', 'N/A')
-            
-            # Codecs
-            document.getElementById("codec-h264").innerText = js_data.codecs.h264
-            document.getElementById("codec-webm").innerText = js_data.codecs.webm
-            
-            # Sensors
-            document.getElementById("sensor-info").innerText = f"ACC: {js_data.sensors.motion} | ORIENT: {js_data.sensors.orientation}"
+            document.getElementById("store-quota").innerText = js_data.get('storage', {}).get('quota', 'N/A')
+            document.getElementById("audio-rate").innerText = js_data.get('audio', {}).get('sampleRate', 'N/A')
 
-            # 5. IP & Geo (External API)
+            # Codecs & Sensors
+            codecs = js_data.get('codecs', {})
+            document.getElementById("codec-h264").innerText = codecs.get('h264', 'NO')
+            document.getElementById("codec-webm").innerText = codecs.get('webm', 'NO')
+            
+            sns = js_data.get('sensors', {})
+            document.getElementById("sensor-info").innerText = f"MOT:{sns.get('motion')} | ORI:{sns.get('orientation')}"
+
+            # 4. NETWORK & GEO
             try:
-                response = await pyfetch("https://ipapi.co/json/")
-                if response.ok:
-                    data = await response.json()
-                    document.getElementById("ip-info").innerText = f"{data.get('ip', 'Hidden')} ({data.get('org', 'ISP')})"
+                resp = await pyfetch("https://ipapi.co/json/")
+                if resp.ok:
+                    ip_data = (await resp.json()).to_py() # CONVERT TO PYTHON DICT
+                    document.getElementById("ip-info").innerText = ip_data.get('ip', 'Hidden')
+                    document.getElementById("isp-info").innerText = ip_data.get('org', 'Unknown ISP')
             except:
-                document.getElementById("ip-info").innerText = "ENCRYPTED/VPN"
+                document.getElementById("ip-info").innerText = "BLOCKED"
+                document.getElementById("isp-info").innerText = "ENCRYPTED"
 
-            # 6. Display Refresh Rate (Calculated)
+            # 5. REFRESH RATE
             fps = await calculateRefreshRate()
             document.getElementById("refresh-rate").innerText = f"{fps} Hz"
 
-            # 7. User Agent & DNA Calculation
-            ua = navigator.userAgent
-            document.getElementById("ua-info").innerText = ua
-            
-            # PYTHON FINGERPRINTING LOGIC
-            # We take multiple data points and hash them to create a unique ID
-            fingerprint_seed = {
-                "ua": ua,
-                "res": f"{screen.width}x{screen.height}",
-                "gpu": js_data.gpu,
-                "mem": str(getattr(navigator, 'deviceMemory', '0')),
-                "langs": list(navigator.languages),
-                "tz": Intl.DateTimeFormat().resolvedOptions().timeZone
-            }
-            
-            seed_str = json.dumps(fingerprint_seed, sort_keys=True)
-            dna_hash = hashlib.sha256(seed_str.encode()).hexdigest()[:16].upper()
+            # 6. FINGERPRINT DNA
+            dna_seed = f"{navigator.userAgent}{screen.width}{js_data.get('gpu')}{navigator.language}"
+            dna_hash = hashlib.sha256(dna_seed.encode()).hexdigest()[:16].upper()
             document.getElementById("device-dna").innerText = dna_hash
-            
-            # Final Stats
-            document.getElementById("data-count").innerText = "48"
-            document.getElementById("points-count").innerText = "48"
+            document.getElementById("data-count").innerText = "50"
 
+        # Execute
         asyncio.ensure_future(run_recon())
     </script>
-
 </body>
 </html>
