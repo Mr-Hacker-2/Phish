@@ -31,64 +31,117 @@
 </head>
 <body class="p-4 md:p-8">
 
-    <div class="max-w-6xl mx-auto">
+    <div class="max-w-7xl mx-auto">
         <!-- Header -->
-        <header class="mb-8 border-b border-green-900 pb-4">
-            <h1 class="text-3xl font-bold flex items-center gap-3">
-                <span class="animate-pulse">●</span> SYSTEM_RECON_V1.0
-            </h1>
-            <p class="text-green-700 text-sm mt-1">Status: Running PyScript (Python 3.11 in-browser)</p>
+        <header class="mb-8 border-b border-green-900 pb-4 flex justify-between items-end">
+            <div>
+                <h1 class="text-3xl font-bold flex items-center gap-3">
+                    <span class="animate-pulse text-red-600">●</span> FULL_SYSTEM_AUDIT_PRO
+                </h1>
+                <p class="text-green-700 text-sm mt-1 uppercase tracking-tighter font-bold">Scanning level: MAXIMUM PERMITTED BY BROWSER</p>
+            </div>
+            <div class="text-right text-[10px] text-green-800">
+                AUDIT_ID: <span id="audit-id">...</span>
+            </div>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
             
-            <!-- Dashboard Main -->
-            <div class="lg:col-span-2 space-y-6">
+            <!-- Dashboard Main (3 columns) -->
+            <div class="lg:col-span-3 space-y-4">
                 
-                <!-- Live Capture Section -->
-                <div class="glass p-6 rounded-lg terminal-glow">
-                    <h2 class="text-xl mb-4 flex items-center gap-2">
-                        <i class="fas fa-microchip"></i> Hardware & Environment Info
-                    </h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="output-grid">
-                        <!-- Python will inject data here -->
-                        <div class="border-l-2 border-green-500 pl-4 py-2">
-                            <p class="data-label">Operating System</p>
-                            <p class="data-value" id="os-info">Loading...</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- HARDWARE BLOCK -->
+                    <div class="glass p-4 rounded border-t-2 border-green-500">
+                        <h2 class="text-xs font-bold mb-3 text-green-500 uppercase">Hardware Assets</h2>
+                        <div class="space-y-3">
+                            <div><p class="data-label">CPU Cores</p><p class="data-value" id="cpu-info">...</p></div>
+                            <div><p class="data-label">Estimated RAM</p><p class="data-value" id="ram-info">...</p></div>
+                            <div><p class="data-label">GPU Renderer</p><p class="data-value text-xs" id="gpu-info">...</p></div>
+                            <div><p class="data-label">Touch Support</p><p class="data-value" id="touch-info">...</p></div>
                         </div>
-                        <div class="border-l-2 border-green-500 pl-4 py-2">
-                            <p class="data-label">Browser Engine</p>
-                            <p class="data-value" id="browser-info">Loading...</p>
+                    </div>
+
+                    <!-- NETWORK BLOCK -->
+                    <div class="glass p-4 rounded border-t-2 border-blue-500">
+                        <h2 class="text-xs font-bold mb-3 text-blue-500 uppercase">Connectivity</h2>
+                        <div class="space-y-3">
+                            <div><p class="data-label">Public IP</p><p class="data-value text-blue-400" id="ip-info">Fetching...</p></div>
+                            <div><p class="data-label">Connection Type</p><p class="data-value" id="net-type">...</p></div>
+                            <div><p class="data-label">Downlink Speed</p><p class="data-value" id="net-speed">...</p></div>
+                            <div><p class="data-label">Do Not Track</p><p class="data-value" id="dnt-info">...</p></div>
                         </div>
-                        <div class="border-l-2 border-green-500 pl-4 py-2">
-                            <p class="data-label">Logical CPU Cores</p>
-                            <p class="data-value" id="cpu-info">Loading...</p>
-                        </div>
-                        <div class="border-l-2 border-green-500 pl-4 py-2">
-                            <p class="data-label">Display Resolution</p>
-                            <p class="data-value" id="screen-info">Loading...</p>
-                        </div>
-                        <div class="border-l-2 border-green-500 pl-4 py-2">
-                            <p class="data-label">System Language</p>
-                            <p class="data-value" id="lang-info">Loading...</p>
-                        </div>
-                        <div class="border-l-2 border-green-500 pl-4 py-2">
-                            <p class="data-label">Battery Status</p>
-                            <p class="data-value" id="battery-info">Detecting...</p>
+                    </div>
+
+                    <!-- ENVIRONMENT BLOCK -->
+                    <div class="glass p-4 rounded border-t-2 border-purple-500">
+                        <h2 class="text-xs font-bold mb-3 text-purple-500 uppercase">Environment</h2>
+                        <div class="space-y-3">
+                            <div><p class="data-label">Operating System</p><p class="data-value" id="os-info">...</p></div>
+                            <div><p class="data-label">Timezone</p><p class="data-value" id="tz-info">...</p></div>
+                            <div><p class="data-label">Language</p><p class="data-value" id="lang-info">...</p></div>
+                            <div><p class="data-label">Color Depth</p><p class="data-value" id="color-info">...</p></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Terminal Output -->
-                <div class="bg-black p-4 rounded-lg border border-green-900 h-48 overflow-y-auto text-xs opacity-80">
-                    <p class="text-green-500">[INFO] Initializing Python 3.11 Runtime...</p>
-                    <p class="text-green-500">[INFO] Importing platform, sys, and js modules...</p>
-                    <p id="log-1" class="hidden text-green-500">[SUCCESS] Bridge to JavaScript DOM established.</p>
-                    <p id="log-2" class="hidden text-green-500">[SUCCESS] Reading navigator.hardwareConcurrency...</p>
-                    <p id="log-3" class="hidden text-green-500">[SUCCESS] Full report generated.</p>
+                <!-- SECOND ROW: POWER & DISPLAY -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="glass p-4 rounded flex justify-between items-center">
+                        <div>
+                            <p class="data-label">Battery Level</p>
+                            <p class="data-value text-2xl font-black" id="battery-level">--%</p>
+                        </div>
+                        <div id="battery-status" class="text-xs text-green-500 font-bold px-2 py-1 border border-green-500 rounded">
+                            WAITING...
+                        </div>
+                    </div>
+                    <div class="glass p-4 rounded flex justify-between items-center">
+                        <div>
+                            <p class="data-label">Primary Display</p>
+                            <p class="data-value text-2xl font-black" id="screen-info">...</p>
+                        </div>
+                        <div class="text-[10px] text-gray-500 leading-tight">
+                            REFRESH RATE<br><span id="refresh-rate">--</span> Hz
+                        </div>
+                    </div>
+                </div>
+
+                <!-- USER AGENT TERMINAL -->
+                <div class="bg-black/50 p-4 rounded border border-green-900/50">
+                    <p class="data-label mb-1">Full Browser Signature (User Agent)</p>
+                    <p class="text-[10px] text-green-600 break-all font-mono italic" id="ua-info">...</p>
                 </div>
             </div>
+
+            <!-- Learning Sidebar -->
+            <div class="space-y-4">
+                <div class="bg-red-950/20 border border-red-500/50 p-4 rounded text-xs">
+                    <h3 class="font-bold text-red-500 mb-2 uppercase">The Hard Truth</h3>
+                    <p class="mb-2">Even with Python, a browser <span class="text-white underline">cannot</span> see:</p>
+                    <ul class="list-disc list-inside text-red-200/60 space-y-1">
+                        <li>Your MAC Address</li>
+                        <li>Your CPU Serial Number</li>
+                        <li>Your Files/Documents</li>
+                        <li>Your Installed Apps</li>
+                    </ul>
+                    <p class="mt-2 text-[10px] italic text-red-400">This is called "Sandboxing". It is the primary defense of the internet.</p>
+                </div>
+
+                <div class="bg-green-950/20 border border-green-800 p-4 rounded text-[10px]">
+                    <h3 class="text-green-400 font-bold mb-2 uppercase">Python "Requests" Simulation</h3>
+                    <p class="text-gray-400 mb-2">In real Python, you'd use <code class="text-green-300">requests.get()</code>. Here we use PyScript's fetch:</p>
+                    <pre class="bg-black p-2 rounded text-green-500 overflow-x-auto">
+from pyodide.http import pyfetch
+response = await pyfetch(
+  "https://ipapi.co/json/"
+)
+data = await response.json()
+print(data['ip'])</pre>
+                </div>
+            </div>
+        </div>
+    </div>
 
             <!-- Learning Sidebar -->
             <div class="space-y-6">
@@ -126,34 +179,82 @@ h = screen.height
         </div>
     </div>
 
-    <!-- PYTHON LOGIC -->
+    <script>
+        // JS Helper for GPU & Battery (Easier to handle via JS bridge)
+        async function getDeepStats() {
+            const stats = {};
+            
+            // 1. GPU Info
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                stats.gpu = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+            } catch (e) { stats.gpu = "Restricted/Software"; }
+
+            // 2. Battery Info
+            try {
+                const battery = await navigator.getBattery();
+                stats.batteryLevel = Math.round(battery.level * 100) + "%";
+                stats.batteryStatus = battery.charging ? "CHARGING" : "DISCHARGING";
+            } catch (e) { stats.batteryLevel = "N/A"; stats.batteryStatus = "BLOCKED"; }
+
+            return stats;
+        }
+    </script>
+
     <script type="py">
         import platform
-        import sys
-        from js import document, navigator, screen, window
+        import random
+        from js import document, navigator, screen, window, getDeepStats
+        from pyodide.http import pyfetch
+        import asyncio
 
-        def run_recon():
-            # Update UI using Python
-            document.getElementById("os-info").innerText = f"{platform.system()} {platform.release() or '(Web Env)'}"
-            document.getElementById("browser-info").innerText = f"{navigator.appName} / {navigator.vendor}"
-            document.getElementById("cpu-info").innerText = f"{navigator.hardwareConcurrency} Logical Cores"
-            document.getElementById("screen-info").innerText = f"{screen.width}x{screen.height} (@{window.devicePixelRatio}x)"
-            document.getElementById("lang-info").innerText = f"{navigator.language}"
+        async def run_recon():
+            # Generate fake audit ID
+            document.getElementById("audit-id").innerText = f"RECON-{random.randint(1000, 9999)}-{random.randint(10, 99)}"
+
+            # Basic Hardware (Python reading JS objects)
+            document.getElementById("cpu-info").innerText = f"{navigator.hardwareConcurrency} Cores"
+            document.getElementById("ram-info").innerText = f"~{getattr(navigator, 'deviceMemory', 'Unknown')} GB"
+            document.getElementById("touch-info").innerText = "Supported" if navigator.maxTouchPoints > 0 else "Not Detected"
             
-            # Show logs with delay simulation
-            document.getElementById("log-1").classList.remove("hidden")
-            document.getElementById("log-2").classList.remove("hidden")
-            document.getElementById("log-3").classList.remove("hidden")
+            # Network
+            conn = getattr(navigator, 'connection', None)
+            if conn:
+                document.getElementById("net-type").innerText = str(conn.effectiveType).upper()
+                document.getElementById("net-speed").innerText = f"{conn.downlink} Mbps"
+            else:
+                document.getElementById("net-type").innerText = "Unknown"
+                document.getElementById("net-speed").innerText = "N/A"
+            
+            document.getElementById("dnt-info").innerText = "Active" if navigator.doNotTrack == "1" else "Disabled"
+            
+            # Environment
+            document.getElementById("os-info").innerText = f"{platform.system()} {platform.release()}"
+            document.getElementById("tz-info").innerText = window.Intl.DateTimeFormat().resolvedOptions().timeZone
+            document.getElementById("lang-info").innerText = navigator.language.upper()
+            document.getElementById("color-info").innerText = f"{screen.colorDepth}-bit"
+            document.getElementById("screen-info").innerText = f"{screen.width}x{screen.height}"
+            document.getElementById("ua-info").innerText = navigator.userAgent
 
-            # Try to get Battery (Async in JS, but we can read the properties if available)
+            # Fetch Deep Stats (Async JS function)
+            js_stats = await getDeepStats()
+            document.getElementById("gpu-info").innerText = js_stats.gpu
+            document.getElementById("battery-level").innerText = js_stats.batteryLevel
+            document.getElementById("battery-status").innerText = js_stats.batteryStatus
+
+            # IP Fetching
             try:
-                # This is a bit complex for a simple demo but shows the bridge
-                document.getElementById("battery-info").innerText = "Authorized" if navigator.userAgent else "Unknown"
-            except:
-                document.getElementById("battery-info").innerText = "Access Denied"
+                response = await pyfetch("https://ipapi.co/json/")
+                if response.ok:
+                    data = await response.json()
+                    document.getElementById("ip-info").innerText = f"{data['ip']} ({data['city']})"
+            except Exception as e:
+                document.getElementById("ip-info").innerText = "BLOCKED BY AD-BLOCKER"
 
-        # Execute
-        run_recon()
+        # Run the async loop
+        asyncio.ensure_future(run_recon())
     </script>
 
 </body>
