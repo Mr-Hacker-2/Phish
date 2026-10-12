@@ -249,8 +249,7 @@
         import hashlib
         import json
         from js import document, navigator, screen, window, getDeepStats, Intl, calculateRefreshRate
-        from pyodide.http import pyfetch
-
+        
         async def run_recon():
             # 1. CORE DATA (PYTHON -> JS DOM)
             document.getElementById("cpu-info").innerText = f"{navigator.hardwareConcurrency} Cores"
@@ -268,11 +267,8 @@
             gpc = "GPC:ON" if getattr(navigator, 'globalPrivacyControl', False) else "GPC:OFF"
             document.getElementById("track-signals").innerText = f"{dnt} | {gpc}"
 
-            try:
-                await pyfetch("https://googleads.g.doubleclick.net/pagead/adview")
-                document.getElementById("ads-info").innerText = "CLEAN"
-            except:
-                document.getElementById("ads-info").innerText = "ACTIVE"
+            # Privacy mode: do not contact an advertising endpoint to infer ad status.
+            document.getElementById("ads-info").innerText = "NOT CHECKED (PRIVACY MODE)"
 
             # 3. ASYNC DEEP STATS
             js_data_raw = await getDeepStats()
@@ -300,15 +296,9 @@
             document.getElementById("sensor-info").innerText = f"MOT:{sns.get('motion')} | ORI:{sns.get('orientation')}"
 
             # 4. NETWORK & GEO
-            try:
-                resp = await pyfetch("https://ipapi.co/json/")
-                if resp.ok:
-                    ip_data = (await resp.json()).to_py() # CONVERT TO PYTHON DICT
-                    document.getElementById("ip-info").innerText = ip_data.get('ip', 'Hidden')
-                    document.getElementById("isp-info").innerText = ip_data.get('org', 'Unknown ISP')
-            except:
-                document.getElementById("ip-info").innerText = "BLOCKED"
-                document.getElementById("isp-info").innerText = "ENCRYPTED"
+            # Do not send the visitor's request to a third-party IP lookup service.
+            document.getElementById("ip-info").innerText = "NOT QUERIED"
+            document.getElementById("isp-info").innerText = "NOT QUERIED"
 
             # 5. REFRESH RATE
             fps = await calculateRefreshRate()
